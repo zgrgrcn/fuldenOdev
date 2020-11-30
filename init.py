@@ -1,5 +1,5 @@
 import pandas as pd
-data = pd.read_excel(r'/Users/zgrgrcn/Desktop/fuldenOdev/ilmesafe.xlsx')
+data = pd.read_excel(r'ilmesafe.xlsx')
 ilListesi = pd.DataFrame(data, columns= ['İL ADI'])
 print (ilListesi)
 
