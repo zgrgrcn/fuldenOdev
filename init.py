@@ -5,12 +5,24 @@ import matplotlib.pyplot as plt
 data = pd.read_excel(r'ilmesafe.xlsx')
 df = pd.DataFrame(data)
 
+dA=[] #distanceArray
+cA=[] #citiesArray
+for columnIndex in range(81):
+    dA.append([])
+    column=df[df.columns[columnIndex+2]]
+    cA.append(column.name)
+    for rowIndex in range(81):
+        dA[columnIndex].append(column[rowIndex])
+        # print (column[rowIndex+1])
+
+# print(dA)
 def getCityName(cityIndex):
-    return df[df.columns[1]][cityIndex-1]
+    # return df[df.columns[1]][cityIndex-1]
+    return cA[cityIndex-1]
 
 
 def getCityNames(cityList):
-    cityName=[]
+    cityName=[] 
     for city in cityList:
         if city == 82:
             pass
@@ -22,7 +34,8 @@ def getCityNames(cityList):
 def getDistance(city1Index, city2Index):
     if city1Index >= 1 and city1Index <= 82 and city2Index >= 1 and city2Index <= 82:
         # print(getCityName(city1Index) +' to '+getCityName(city2Index))
-        return df[df.columns[city1Index+1]][city2Index-1]
+        # return df[df.columns[city1Index+1]][city2Index-1]
+        return dA[city1Index-1][city2Index-1]
     else:
         print('one of the cities is out of range (1-81)')
         return -999999
@@ -50,14 +63,14 @@ cost0 = getTotalDistance(cityList)
 print('total distance for Turkey : ', cost0)
 
 
-T = 100
-factor = 0.95
+T = 140
+factor = 0.9757
 T_init = T
 for i in range(100):
     print(i, 'cost=', cost0, ' T=', T)
 
     T = T*factor
-    for j in range(5000):
+    for j in range(10000):
         r1, r2 = np.random.randint(0,len(cityList),2)
         # print(r1,r2)
         cityList[r1], cityList[r2]=cityList[r2],cityList[r1]
@@ -66,6 +79,7 @@ for i in range(100):
             cost0=newCost
         else:
             x = np.random.uniform()
+            # 1/(1+np.exp((cost0-newCost)/T)):
             if x < np.exp((cost0-newCost)/T):
                 cost0 = newCost
             else:
